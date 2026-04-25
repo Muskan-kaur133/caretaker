@@ -1,8 +1,0 @@
-fastapi
-uvicorn
-google-generativeai
-firebase-admin
-python-dotenv
-cryptography
-pydantic
-python-multipart
