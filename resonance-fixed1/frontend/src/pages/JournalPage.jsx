@@ -23,7 +23,7 @@ export default function JournalPage({ user, entries, setEntries }) {
     if (!canSave) return;
     setSaving(true);
     const entry = { text: text.trim(), mood, moodLabel: MOODS.find(m => m.score === mood)?.label, date: new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }), ts: Date.now() };
-    try { await apiFetch('/journal/vent', { method: 'POST', body: JSON.stringify({ content: entry.text }) }); } catch { /* silent */ }
+    try { await apiFetch('/journal/vent', { method: 'POST', body: JSON.stringify({ content: entry.text, mood: entry.mood, user_email: user?.email || '', user_name: user?.name || '' }) }); } catch { /* silent */ }
     setEntries(prev => [entry, ...prev]);
     setText(''); setMood(null); setSaving(false); setSaved(true);
     setTimeout(() => setSaved(false), 3000);

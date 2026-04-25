@@ -9,18 +9,36 @@ const INSIGHTS = [
   { label: 'Emotional drop', insight: "Your mood has been declining while your language stays neutral. That gap — between how things sound and how they feel — is worth paying attention to.", evidence: 'Declining mood trend vs. neutral language tone', minEntries: 4 },
 ];
 
-export default function PatternsPage({ entries }) {
+export default function PatternsPage({ entries, user }) {
+  const [firestoreEntries, setFirestoreEntries] = React.useState([]);
+  React.useEffect(() => {
+    if (!user?.email) return;
+    import('../api').then(({ apiFetch }) => {
+      apiFetch('/journal/stats?user_email=' + encodeURIComponent(user.email))
+        .then(r => r.json())
+        .then(data => {
+          if (data.mood_trend && data.mood_trend.length > 0) {
+            setFirestoreEntries(data.mood_trend.map((m, i) => ({
+              mood: Math.round((1 - m.stress) * 4) + 1,
+              moodLabel: '',
+              ts: i,
+            })));
+          }
+        }).catch(console.error);
+    });
+  }, [user]);
+  const allEntries = firestoreEntries.length > 0 ? firestoreEntries : entries;
   const moodHistory = useMemo(() => {
-    const last7 = entries.slice(0, 7).reverse();
+    const last7 = allEntries.slice(0, 7).reverse();
     const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Today'];
     return days.map((day, i) => ({ day, mood: last7[i]?.mood ?? null }));
   }, [entries]);
 
-  const avgMood = entries.length
-    ? (entries.slice(0, 7).reduce((a, e) => a + e.mood, 0) / Math.min(entries.length, 7)).toFixed(1)
+  const avgMood = allEntries.length
+    ? (allEntries.slice(0, 7).reduce((a, e) => a + e.mood, 0) / Math.min(allEntries.length, 7)).toFixed(1)
     : null;
 
-  if (!entries.length) {
+  if (!allEntries.length) {
     return (
       <div style={{ textAlign: 'center', padding: '4rem 0' }}>
         <p style={{ fontFamily: theme.fonts.serif, color: c.textSecondary, fontSize: '1.1rem', fontStyle: 'italic', lineHeight: 1.8 }}>
@@ -30,8 +48,8 @@ export default function PatternsPage({ entries }) {
     );
   }
 
-  const trend = entries.length >= 2 
-    ? (entries[0].mood < entries[1].mood ? 'Declining' : entries[0].mood > entries[1].mood ? 'Improving' : 'Steady')
+  const trend = allEntries.length >= 2 
+    ? (allEntries[0].mood < entries[1].mood ? 'Declining' : entries[0].mood > allEntries[1].mood ? 'Improving' : 'Steady')
     : 'Steady';
 
   return (
@@ -44,7 +62,7 @@ export default function PatternsPage({ entries }) {
       {/* Stats */}
       <div style={{ display: 'flex', gap: '12px', marginBottom: '1.5rem' }}>
         {[
-          { label: 'Entries this week', value: Math.min(entries.length, 7) },
+          { label: 'Entries this week', value: Math.min(allEntries.length, 7) },
           { label: 'Average mood', value: avgMood ? `${avgMood} / 5` : '—' },
           { label: 'Trend', value: trend },
         ].map(s => (
@@ -78,7 +96,7 @@ export default function PatternsPage({ entries }) {
       <div style={{ fontSize: '0.68rem', color: c.textMuted, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
         Unsaid layer — what the patterns suggest
       </div>
-      {INSIGHTS.filter(ins => entries.length >= ins.minEntries).map((ins, i) => (
+      {INSIGHTS.filter(ins => allEntries.length >= ins.minEntries).map((ins, i) => (
         <div key={i} style={{
           background: c.bgCard, border: `1px solid ${c.border}`,
           borderRadius: '2px', padding: '1.25rem', marginBottom: '0.75rem',

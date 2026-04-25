@@ -33,12 +33,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from routers import auth, chat, journal, burnout
+from routers import auth, chat, journal, burnout, groups
 
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(chat.router, prefix="/chat", tags=["chat"])
 app.include_router(journal.router, prefix="/journal", tags=["journal"])
 app.include_router(burnout.router, prefix="/burnout", tags=["burnout"])
+app.include_router(groups.router, prefix="/groups", tags=["groups"])
 
 @app.get("/")
 def read_root():

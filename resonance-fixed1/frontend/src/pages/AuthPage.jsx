@@ -17,7 +17,11 @@ export default function AuthPage({ onLogin, onBack }) {
   const handleSubmit = async () => {
     setError('');
     if (!email || !password) { setError('Please fill in all fields.'); return; }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) { setError('Please enter a valid email address.'); return; }
+    if (password.length < 6) { setError('Password must be at least 6 characters.'); return; }
     if (isRegister && !name.trim()) { setError('Please enter your name.'); return; }
+    if (isRegister && !role) { setError('Please select who you are caring for.'); return; }
     setLoading(true);
     try {
       const endpoint = isRegister ? '/auth/register' : '/auth/login';
@@ -37,8 +41,7 @@ export default function AuthPage({ onLogin, onBack }) {
       onLogin({ name: data.name || (isRegister ? name.trim() : email.split('@')[0]), email, role: data.role || role });
     } catch (err) {
       if (err.message.includes('fetch') || err.message.includes('Failed') || err.message.includes('NetworkError')) {
-        // Backend unreachable — allow demo login
-        onLogin({ name: isRegister ? name.trim() : email.split('@')[0], email, role });
+        setError('Cannot reach the server. Make sure the backend is running and port 8000 is set to Public.');
       } else {
         setError(err.message);
       }
