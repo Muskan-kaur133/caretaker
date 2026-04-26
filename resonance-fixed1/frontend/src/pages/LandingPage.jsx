@@ -76,25 +76,17 @@ export default function LandingPage({ onGetStarted, onLogin }) {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           overflow: 'hidden',
         }}>
-          {/* SVG illustration placeholder */}
-          <svg viewBox="0 0 200 260" width="200" height="260" style={{ opacity: 0.9 }}>
-            {/* Person in wheelchair */}
-            <circle cx="130" cy="80" r="22" fill="#C4956A" />
-            <path d="M108 102 Q130 95 152 102 L158 160 L102 160 Z" fill="#8B6914" />
-            {/* Wheelchair */}
-            <circle cx="110" cy="185" r="18" fill="none" stroke="#6B8055" strokeWidth="3" />
-            <circle cx="150" cy="185" r="18" fill="none" stroke="#6B8055" strokeWidth="3" />
-            <path d="M95 150 L100 180 L160 180 L165 150" fill="none" stroke="#6B8055" strokeWidth="3" />
-            <path d="M110 150 L140 150" stroke="#6B8055" strokeWidth="3" />
-            {/* Caretaker standing behind */}
-            <circle cx="75" cy="88" r="20" fill="#D4A882" />
-            <path d="M55 108 Q75 100 95 108 L100 175 L50 175 Z" fill="#C9A84C" />
-            {/* Thought bubble */}
-            <circle cx="55" cy="55" r="3" fill="rgba(197,218,170,0.6)" />
-            <circle cx="47" cy="46" r="5" fill="rgba(197,218,170,0.6)" />
-            <ellipse cx="38" cy="32" rx="18" ry="12" fill="rgba(197,218,170,0.4)" stroke="rgba(197,218,170,0.5)" strokeWidth="1" />
-            <text x="28" y="36" fontSize="9" fill="#A8BF90">💭</text>
-          </svg>
+          <img
+            src="/src/assets/caretaker.png"
+            alt="Caretaker illustration"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderRadius: '50%',
+              display: 'block',
+            }}
+          />
         </div>
 
         {/* Hero text */}
