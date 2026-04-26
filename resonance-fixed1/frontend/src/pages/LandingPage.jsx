@@ -77,7 +77,7 @@ export default function LandingPage({ onGetStarted, onLogin }) {
           overflow: 'hidden',
         }}>
           <img
-            src="/caretaker.png"
+            src="/caretaker2.png"
             alt="Caretaker illustration"
             style={{
               width: '100%',
