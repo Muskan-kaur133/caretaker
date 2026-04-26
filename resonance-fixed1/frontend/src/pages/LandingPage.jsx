@@ -1,5 +1,5 @@
-import React
-import caretakerImg from '../assets/caretaker.png', { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import caretakerImg from '../assets/caretaker.png';
 import { theme } from '../theme/colors';
 
 const c = theme.colors;
