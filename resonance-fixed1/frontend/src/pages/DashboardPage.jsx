@@ -146,7 +146,7 @@ export default function DashboardPage({ user, onLogout }) {
         )}
         {tab === 'journal' && <JournalPage user={user} entries={entries} setEntries={setEntries} />}
         {tab === 'chat' && <ChatPage user={user} entries={entries} burnoutZone={burnoutData.zone} />}
-        {tab === 'patterns' && <PatternsPage entries={entries} />}
+        {tab === 'patterns' && <PatternsPage entries={entries} user={user} />}
         {tab === 'groups' && <GroupsPage user={user} />}
       </main>
     </div>
